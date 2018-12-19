@@ -13,7 +13,7 @@ def get_user_input(callback):
             messagebox.showerror("Errore", "Devi selezionare un listino in formato Excel!")
         else:
             root.quit()
-            callback(layout.get(), spinbox_multiple.get(), label_filename["text"])
+            callback(int(layout.get()), int(spinbox_multiple.get()), label_filename["text"])
     root = Tk()
     layout = tk.IntVar()
     root.geometry("1000x400")
