@@ -1,10 +1,14 @@
 from constraint_solver import get_solution
 from containers import get_containers
+from gui import get_user_input
 from math import ceil, floor
 from utilities import get_margin, xls_to_csv
 from xml.etree.ElementTree import Element, tostring
 
+import tkinter as tk
 import xml.dom.minidom
+
+PIXELS_PER_CM = 37.79
 
 # Create the head of the html price list
 def _head():
@@ -46,7 +50,7 @@ def _body_column(containers, margin):
 # Create the body of the html price list
 def _body(containers):
     containers_heights = [container.height for container in containers]
-    solution, num_columns = get_solution(MULT, floor(COLUMN_HEIGHT), [ceil(h) for h in containers_heights])
+    solution, num_columns = get_solution(MULTIPLE, floor(COLUMN_HEIGHT), [ceil(h) for h in containers_heights])
     body = Element("body")
     first_unused_container = 0
     columns_count = 0
@@ -79,8 +83,22 @@ def listino(csv_file, images_folder):
     containers = get_containers(csv_file, images_folder)
     return _html(containers)
 
-if __name__ == "__main__":
+# Main function
+def main(layout, multiple, pricelist_filename):
+    global COLUMN_HEIGHT
+    global MAX_COLUMNS
+    global MULTIPLE
+    if layout == 0:
+        COLUMN_HEIGHT = 18 * PIXELS_PER_CM
+        MAX_COLUMNS = 4
+    elif layout == 1:
+        COLUMN_HEIGHT = 26 * PIXELS_PER_CM
+        MAX_COLUMNS = 3
+    MULTIPLE = multiple
     xls_to_csv("listino.xls", "listino.csv")
     xml_string = xml.dom.minidom.parseString(tostring(listino("listino.csv", "./images")))
     with open("listino.html", "w") as file:
         file.write(xml_string.toprettyxml())
+
+if __name__ == "__main__":        
+    get_user_input(main)
