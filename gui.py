@@ -4,7 +4,7 @@ from tkinter.filedialog import askopenfilename
 import tkinter as tk
 
 # Select a layout for the price list using a GUI
-def select_layout(callback):
+def get_user_input(callback):
     def _print_filename():
         filename = askopenfilename(filetypes=[("Excel files", "*.xls")])
         label_filename.config(text=filename)
