@@ -2,6 +2,7 @@ from constraint_solver import get_solution
 from containers import get_containers
 from gui import get_user_input
 from math import ceil, floor
+from shutil import copyfile
 from utilities import get_margin, xls_to_csv
 from xml.etree.ElementTree import Element, tostring
 
@@ -85,7 +86,8 @@ def listino(csv_file, images_folder):
     return _html(containers)
 
 # Main function
-def main(layout, multiple, pricelist_filename):
+def main(layout, multiple, pricelist_filename, images_location, save_location):
+    print(images_location)
     global COLUMN_HEIGHT
     global MAX_COLUMNS
     global MULTIPLE
@@ -99,9 +101,13 @@ def main(layout, multiple, pricelist_filename):
     if not os.path.exists("tmp"):
         os.makedirs("tmp")
     xls_to_csv(pricelist_filename, os.path.join("tmp", "listino.csv"))
-    xml_string = xml.dom.minidom.parseString(tostring(listino(os.path.join("tmp", "listino.csv"), "./images")))
-    with open("listino.html", "w") as file:
+    xml_string = xml.dom.minidom.parseString(tostring(listino(os.path.join("tmp", "listino.csv"), images_location)))
+    save_location = os.path.join(save_location, "listino")
+    if not os.path.exists(save_location):
+        os.makedirs(save_location)
+    with open(os.path.join(save_location, "listino.html"), "w") as file:
         file.write(xml_string.toprettyxml())
+    copyfile(os.path.join("res", "listino.css"), os.path.join(save_location, "listino.css"))
     os.remove(os.path.join("tmp", "listino.csv"))
 
 if __name__ == "__main__":        
