@@ -5,6 +5,7 @@ from math import ceil, floor
 from utilities import get_margin, xls_to_csv
 from xml.etree.ElementTree import Element, tostring
 
+import os
 import tkinter as tk
 import xml.dom.minidom
 
@@ -95,10 +96,13 @@ def main(layout, multiple, pricelist_filename):
         COLUMN_HEIGHT = 26 * PIXELS_PER_CM
         MAX_COLUMNS = 3
     MULTIPLE = multiple
-    xls_to_csv(pricelist_filename, "listino.csv")
-    xml_string = xml.dom.minidom.parseString(tostring(listino("listino.csv", "./images")))
+    if not os.path.exists("tmp"):
+        os.makedirs("tmp")
+    xls_to_csv(pricelist_filename, os.path.join("tmp", "listino.csv"))
+    xml_string = xml.dom.minidom.parseString(tostring(listino(os.path.join("tmp", "listino.csv"), "./images")))
     with open("listino.html", "w") as file:
         file.write(xml_string.toprettyxml())
+    os.remove(os.path.join("tmp", "listino.csv"))
 
 if __name__ == "__main__":        
     get_user_input(main)
