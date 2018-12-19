@@ -95,7 +95,7 @@ def main(layout, multiple, pricelist_filename):
         COLUMN_HEIGHT = 26 * PIXELS_PER_CM
         MAX_COLUMNS = 3
     MULTIPLE = multiple
-    xls_to_csv("listino.xls", "listino.csv")
+    xls_to_csv(pricelist_filename, "listino.csv")
     xml_string = xml.dom.minidom.parseString(tostring(listino("listino.csv", "./images")))
     with open("listino.html", "w") as file:
         file.write(xml_string.toprettyxml())
