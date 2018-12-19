@@ -93,3 +93,17 @@ class Container:
         element.append(self._dimension_column())
         element.append(self._price_column())
         return element
+
+# Return a list of containers, given the csv file and the images folder
+def get_containers(csv_file, images_folder):
+    containers = []
+    data = pd.read_csv(csv_file, dtype={"PREZZO": str})
+    for container_info, items_df in data.groupby(["FAMIGLIA", "DESCRIZIONE", "DIMENSIONE IMMAGINE"]):
+        items = []
+        for index, row in items_df.iterrows():
+            items.append(Item(row["CODICE"], row["PREZZO"], row["DIMENSIONE"]))
+        family_image = glob(os.path.join(images_folder, "{}-*.png".format(container_info[0])))[0]
+        family = Family(container_info[0], items, container_info[1], family_image)
+        containers.append(Container(family, container_info[2]))
+    containers.sort(key=lambda container: container.family.code)
+    return containers
