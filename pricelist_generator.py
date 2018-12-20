@@ -28,12 +28,13 @@ def _body_column(containers, margin):
     column = Element("div", {"class": "column"})
     if len(containers) == 1:
         item = containers[0].xml_element()
+        item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
         details_colum = item.find("./div[@class='details-column']")
         details_colum.set("style", "margin-top:{}px;margin-bottom:{}px;".format(margin, margin))
         column.append(item)
         return column
     item = containers[0].xml_element()
-    details_colum = item.find("./div[@class='details-column']")
+    item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
     tot += containers[0].height
     column.append(item)
     for it in containers[1:-1]:
@@ -43,6 +44,7 @@ def _body_column(containers, margin):
         tot += it.height + margin*2
         column.append(item)
     item = containers[-1].xml_element()
+    item.set("class", "{} {}".format(item.get("class"), "column-last-container"))
     tot += containers[-1].height + margin*2
     details_colum = item.find("./div[@class='details-column']")
     details_colum.set("style", "margin-top:{}px;".format(margin*2))
@@ -87,7 +89,6 @@ def listino(csv_file, images_folder):
 
 # Main function
 def main(layout, multiple, pricelist_filename, images_location, save_location):
-    print(images_location)
     global COLUMN_HEIGHT
     global MAX_COLUMNS
     global MULTIPLE
