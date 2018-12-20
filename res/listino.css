@@ -1,0 +1,96 @@
+/* GENERAL */
+body {
+    -webkit-print-color-adjust: exact !important;
+}
+.page {
+    display: flex;
+}
+.column {
+    width: 6.5cm;
+    /* height: 680.22px; */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.dimension-column {
+    text-align: center;
+}
+.dimension-column,
+.price-column {
+    width: 1cm;
+    border-left: 1px solid black;
+    position: relative;
+}
+.price-column {
+    background-color: silver;
+    border-right: 1px solid black;
+    text-align: right;
+}
+.column > div {
+    width: 6cm;
+    display: flex;
+    /* Don't set the height */
+}
+.details-column {
+    width: 4.5cm;
+    display: flex;
+    /* Margins top and bottom have to be setted */
+}
+.details-column .description {
+    width: 1.5cm;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.details-column .description .name {
+    font-size: xx-small;
+}
+.details-column .description .code {
+    font-size: xx-small;
+    line-height: 3mm;
+}
+.dimension-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.dimension-column .dimension {
+    line-height: 3mm;
+    font-size: 2mm;
+}
+.price-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.price {
+    margin-right: 0.3em;
+}
+.price-column .price {
+    line-height: 3mm;
+    font-size: xx-small;
+}
+.column-first-container .details-column,
+.column-first-container .dimension-column,
+.column-first-container .price-column {
+    padding-top: 15px;
+}
+.column-first-container .dimension-column,
+.column-first-container .price-column {
+    border-top: 1px solid black;
+}
+.column-last-container .details-column,
+.column-last-container .dimension-column,
+.column-last-container .price-column {
+    padding-bottom: 15px;
+}
+.column-last-container .dimension-column,
+.column-last-container .price-column {
+    border-bottom: 1px solid black;
+}
+@media print {
+    div {
+        page-break-inside: avoid;
+    }
+}
