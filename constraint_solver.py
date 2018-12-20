@@ -35,7 +35,7 @@ def get_solution(mult, column_height, heights):
     for c in range(num_columns):
         FS += [slv.IntVar(0, column_height, "FS_{}".format(c))]
     mean_FS = slv.IntVar(0, column_height, "mean_FS") # mean free space
-    Z = slv.IntVar(0, column_height, "Z") # variance
+    Z = slv.IntVar(0, column_height*column_height, "Z") # variance
     # Define contraints
     for i in range(len(X)-1):
         for j in range(i+1, len(X)):
@@ -44,8 +44,9 @@ def get_solution(mult, column_height, heights):
         used_space_c = sum((X[i] == c)*heights[i] for i in range(len(heights)))
         slv.Add(US[c] == used_space_c)
         slv.Add(FS[c] == column_height - US[c])
+    slv.Add(mean_FS == sum([FS[c] for c in range(num_columns)])//num_columns)
     # Cost function
-    slv.Add(Z == slv.Max([FS[c] for c in range(num_columns)]))
+    slv.Add(Z == sum([(FS[c]-mean_FS)*(FS[c]-mean_FS) for c in range(num_columns)]))
     m = slv.Minimize(Z, 1)
     # Find optimal solution
     variables = X
