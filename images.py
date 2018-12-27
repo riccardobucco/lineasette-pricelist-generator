@@ -3,18 +3,17 @@ import os
 from PIL import Image
 
 # Given an image (RGBA), return:
-# last_transparent_row_top,
-# last_transparent_row_bottom,
 # last_transparent_column_left,
-# last_transparent_column_right
+# last_transparent_row_top,
+# last_transparent_column_right,
+# last_transparent_row_bottom
 def _get_box(img):
     w, h = img.size
     pixels = list(img.getdata())
-    result = [-1, h, -1, w]
-    for index, iterable in enumerate([range(h), reversed(range(h)), range(w), reversed(range(w))]):
+    result = [-1, -1, w, h]
+    for index, iterable in enumerate([range(w), range(h), reversed(range(w)), reversed(range(h))]):
         for i in iterable:
-            vec = pixels[w*i:w*(i+1)] if index < 2 else [pixels[idx*w+i] for idx in range(h)]
-            print(min([pixel[3] for pixel in vec]))
+            vec = pixels[w*i:w*(i+1)] if index==1 or index==3 else [pixels[idx*w+i] for idx in range(h)]
             if max([pixel[3] for pixel in vec]) == 0:
                 result[index] = i
             else:
