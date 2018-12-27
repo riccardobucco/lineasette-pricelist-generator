@@ -37,7 +37,6 @@ def align_images(x, y, in_folder, out_folder=None):
         img = img.convert("RGBA")
         w, h = img.size
         box = _get_box(img)
-        print(box)
         img = img.crop((box[0]+1, box[1]+1, box[2]-1, box[3]-1))
         n_empty_rows = (box[1] + 1) + (h - box[3] + 1)
         n_empty_columns = (box[0] + 1) + (w - box[2] + 1)
