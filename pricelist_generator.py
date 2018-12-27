@@ -13,6 +13,7 @@ import xml.dom.minidom
 
 PIXELS_PER_CM = 37.79
 
+# Get the solution of the problem through a server call
 def _get_solution(mult, column_height, heights):
     data = {"mult": mult,
             "column_height": column_height,
