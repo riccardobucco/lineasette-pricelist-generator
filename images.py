@@ -41,8 +41,6 @@ def align_images(x, y, in_folder, out_folder=None):
         img = img.crop((box[0]+1, box[1]+1, box[2]-1, box[3]-1))
         n_empty_rows = (box[1] + 1) + (h - box[3] + 1)
         n_empty_columns = (box[0] + 1) + (w - box[2] + 1)
-        print("w,h={},{}   img.size={},{}".format(w,h,img.size[0], img.size[1]))
-        print("file {}, n_empty_cols {}, n_empty_rows {}".format(file, n_empty_columns, n_empty_rows))
         value = np.empty((), dtype=np.dtype("int,int,int,int"))
         value[()] = (255, 255, 255, 0)
         margin_left = np.full((img.size[1], 0 if x==-1 else math.floor(n_empty_columns/2) if x==0 else n_empty_columns), value)
