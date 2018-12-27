@@ -1,4 +1,3 @@
-from constraint_solver import get_solution
 from containers import get_containers
 from gui import get_user_input
 from math import ceil, floor
@@ -7,10 +6,20 @@ from utilities import get_margin, xls_to_csv
 from xml.etree.ElementTree import Element, tostring
 
 import os
+import requests
 import tkinter as tk
 import xml.dom.minidom
 
 PIXELS_PER_CM = 37.79
+URL_CP_SOLVER = "https://shielded-reef-26390.herokuapp.com/"
+
+def _get_solution(mult, column_height, heights):
+    data = {"mult": mult,
+            "column_height": column_height,
+            "heights": str(heights).replace(" ", "").lstrip("[").rstrip("]")}
+    r = requests.post(URL_CP_SOLVER, data=data)
+    result = r.json()
+    return result["solution"], result["num_columns"]
 
 # Create the head of the html price list
 def _head():
@@ -54,7 +63,7 @@ def _body_column(containers, margin):
 # Create the body of the html price list
 def _body(containers):
     containers_heights = [container.height for container in containers]
-    solution, num_columns = get_solution(MULTIPLE, floor(COLUMN_HEIGHT), [ceil(h) for h in containers_heights])
+    solution, num_columns = _get_solution(MULTIPLE, floor(COLUMN_HEIGHT), [ceil(h) for h in containers_heights])
     body = Element("body")
     first_unused_container = 0
     columns_count = 0
