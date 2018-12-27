@@ -122,6 +122,6 @@ def main(layout, multiple, pricelist_filename, images_location, save_location):
 
 if __name__ == "__main__":
     config = ConfigParser()
-    config.read("config.ini")
+    config.read(os.path.join("res", "config.ini"))
     URL_CP_SOLVER = config["cpsolver"]["url"]
     get_user_input(main)
