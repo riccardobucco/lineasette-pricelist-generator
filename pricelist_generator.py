@@ -1,3 +1,4 @@
+from configparser import ConfigParser
 from containers import get_containers
 from gui import get_user_input
 from math import ceil, floor
@@ -11,7 +12,6 @@ import tkinter as tk
 import xml.dom.minidom
 
 PIXELS_PER_CM = 37.79
-URL_CP_SOLVER = "https://shielded-reef-26390.herokuapp.com/"
 
 def _get_solution(mult, column_height, heights):
     data = {"mult": mult,
@@ -120,5 +120,8 @@ def main(layout, multiple, pricelist_filename, images_location, save_location):
     copyfile(os.path.join("res", "listino.css"), os.path.join(save_location, "listino.css"))
     os.remove(os.path.join("tmp", "listino.csv"))
 
-if __name__ == "__main__":        
+if __name__ == "__main__":
+    config = ConfigParser()
+    config.read("config.ini")
+    URL_CP_SOLVER = config["cpsolver"]["url"]
     get_user_input(main)
