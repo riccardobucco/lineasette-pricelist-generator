@@ -1,6 +1,7 @@
 from glob import glob
 from enum import Enum
 from lineasette_entities import Family, Item
+from PIL import Image
 from xml.etree.ElementTree import Element
 
 import os
@@ -31,14 +32,17 @@ class Proportions(Enum):
 # Possible dimensions each Container could have
 class Dimensions(Enum):
     GRANDE = 2.0
+    MEDIA = 1.5
     PICCOLA = 1.0
 
 # HTML representation of a Family
 class Container:
-    def __init__(self, family, dimension):
+    def __init__(self, family):
         self._family = family
-        self._dimension = Dimensions.__members__[dimension.upper()]
-        self._proportion = Proportions.__members__[family.image.rstrip(".png").rsplit("-", 1)[1].upper()]
+        img = Image.open(family.image)
+        w, h = img.size
+        self._dimension = Dimensions.PICCOLA if w==833 or h==833 else Dimensions.MEDIA if w==1250 or h==1250 else Dimensions.GRANDE
+        self._proportion = Proportions.QUADRATO if w==h else Proportions.RETT1 if w>h else Proportions.RETT2
 
     @property
     def family(self):
@@ -103,12 +107,12 @@ class Container:
 def get_containers(csv_file, images_folder):
     containers = []
     data = pd.read_csv(csv_file, dtype={"PREZZO": str})
-    for container_info, items_df in data.groupby(["FAMIGLIA", "DESCRIZIONE", "DIMENSIONE IMMAGINE"]):
+    for container_info, items_df in data.groupby(["FAMIGLIA", "DESCRIZIONE"]):
         items = []
         for index, row in items_df.iterrows():
             items.append(Item(row["CODICE"], row["PREZZO"], row["DIMENSIONE"]))
-        family_image = glob(os.path.join(images_folder, "{}-*.png".format(container_info[0])))[0]
+        family_image = glob(os.path.join(images_folder, "{}.png".format(container_info[0])))[0]
         family = Family(container_info[0], items, container_info[1], family_image)
-        containers.append(Container(family, container_info[2]))
+        containers.append(Container(family))
     containers.sort(key=lambda container: container.family.code)
     return containers
