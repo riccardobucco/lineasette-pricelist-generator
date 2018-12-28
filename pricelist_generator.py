@@ -68,7 +68,7 @@ def _body(containers):
     body = Element("body")
     first_unused_container = 0
     columns_count = 0
-    page = Element("div", {"class": "page"})
+    page = Element("div", {"class": "page", "style": "height: {}".format(COLUMN_HEIGHT)})
     for i in range(num_columns):
         margin = get_margin(containers_heights[solution.index(i) : len(solution) - list(reversed(solution)).index(i)], COLUMN_HEIGHT)
         max_containers = solution.count(i)
