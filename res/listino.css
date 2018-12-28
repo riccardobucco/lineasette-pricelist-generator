@@ -9,7 +9,6 @@ body {
     width: 7cm;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 }
 .dimension-column {
     text-align: center;
