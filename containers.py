@@ -105,6 +105,7 @@ class Container:
 
 # Return a list of containers, given the csv file and the images folder
 def get_containers(csv_file, images_folder):
+    print("Generating a list of containers...")
     containers = []
     data = pd.read_csv(csv_file, dtype={"PREZZO": str})
     for container_info, items_df in data.groupby(["FAMIGLIA", "DESCRIZIONE"]):
@@ -114,5 +115,11 @@ def get_containers(csv_file, images_folder):
         family_image = glob(os.path.join(images_folder, "{}.png".format(container_info[0])))[0]
         family = Family(container_info[0], items, container_info[1], family_image)
         containers.append(Container(family))
+    print("{} containers have been successfully generated:".format(len(containers)))
     containers.sort(key=lambda container: container.family.code)
+    containers_str = ""
+    for container in containers[:-1]:
+        containers_str += "{}, ".format(container.family.code)
+    containers_str += containers[-1].family.code
+    print(containers_str)
     return containers

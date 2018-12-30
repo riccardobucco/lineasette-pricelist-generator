@@ -64,7 +64,19 @@ def _body_column(containers, margin):
 # Create the body of the html price list
 def _body(containers):
     containers_heights = [container.height for container in containers]
+    print("Computing the layout...")
     solution, num_columns = _get_solution(MULTIPLE, floor(COLUMN_HEIGHT), [ceil(h) for h in containers_heights])
+    print("COMPUTED LAYOUT:")
+    print("- Number of columns: {}".format(num_columns))
+    print("- Solution:")
+    for c in range(num_columns):
+        print("  Column n.{}:".format(c))
+        c_sol = [j for j, sol in enumerate(solution) if sol==c]
+        c_sol_str = ""
+        for i in c_sol[:-1]:
+            c_sol_str += "{}, ".format(containers[i].family.code)
+        c_sol_str += containers[c_sol[-1]].family.code
+        print("  {}".format(c_sol_str))
     body = Element("body")
     first_unused_container = 0
     columns_count = 0
@@ -109,17 +121,26 @@ def main(layout, multiple, pricelist_filename, images_location, save_location):
         COLUMN_HEIGHT = 26 * PIXELS_PER_CM
         MAX_COLUMNS = 3
     MULTIPLE = multiple
+    print("Layout: {}".format("horizontal" if layout==1 else "vertical"))
+    print("Pricelist: {}".format(pricelist_filename))
+    print("Images location: {}".format(images_location))
+    print("Save location: {}".format(save_location))
     if not os.path.exists("tmp"):
         os.makedirs("tmp")
+    print("Converting the pricelist into a .csv file...")
     xls_to_csv(pricelist_filename, os.path.join("tmp", "listino.csv"))
     xml_string = xml.dom.minidom.parseString(tostring(listino(os.path.join("tmp", "listino.csv"), images_location)))
+    print("Saving the pricelist as a .html file...")
     save_location = os.path.join(save_location, "listino")
     if not os.path.exists(save_location):
         os.makedirs(save_location)
     with open(os.path.join(save_location, "listino.html"), "w") as file:
         file.write(xml_string.toprettyxml())
     copyfile(os.path.join("res", "listino.css"), os.path.join(save_location, "listino.css"))
+    print("Removing temporary files...")
     os.remove(os.path.join("tmp", "listino.csv"))
+    print("Pricelist successfully generated!")
+    input("Press ENTER to continue...")
 
 if __name__ == "__main__":
     config = ConfigParser()
