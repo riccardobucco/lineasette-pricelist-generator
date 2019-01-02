@@ -6,6 +6,7 @@ from xml.etree.ElementTree import Element
 
 import os
 import pandas as pd
+import re
 
 # Possible proportions each Container could have
 class Proportions(Enum):
@@ -117,7 +118,10 @@ def get_containers(csv_file, images_folder):
             family_image = glob(os.path.join(images_folder, "{}.png".format(container_info[0])))[0]
             family = Family(container_info[0], items, container_info[1], family_image)
             list_containers.append(Container(family))
-        list_containers.sort(key=lambda container: container.family.code)
+        list_containers.sort(key=lambda container: 
+                                    (re.findall("^[A-Za-z]+", container.family.code)[0],
+                                    int(re.findall("[0-9]+", container.family.code)[0]),
+                                    re.findall("[A-Za-z]*$", container.family.code)))
         containers += list_containers
     print("{} containers have been successfully generated:".format(len(containers)))
     containers_str = ""
