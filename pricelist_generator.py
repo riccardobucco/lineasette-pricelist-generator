@@ -69,30 +69,28 @@ def _head():
     return head
 
 # Create a column of the html price list
-def _body_column(containers, margin):
+def _body_column(containers):
     tot = 0
     column = Element("div", {"class": "column"})
+    # TODO: Test the case in which a column has only one container
     if len(containers) == 1:
         item = containers[0].xml_element()
         item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
         details_colum = item.find("./div[@class='details-column']")
-        details_colum.set("style", "margin-top:{}px;margin-bottom:{}px;".format(margin, margin)) #TODO
+        column.set("style", "justify-content:center;align-items:center;")
         column.append(item)
         return column
     item = containers[0].xml_element()
     item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
     item.set("style", "height:{}px".format(containers[0].height))
-    tot += containers[0].height
     column.append(item)
     for it in containers[1:-1]:
         item = it.xml_element()
         details_colum = item.find("./div[@class='details-column']")
         item.set("style", "flex-grow: 1;")
-        tot += it.height + margin*2
         column.append(item)
     item = containers[-1].xml_element()
     item.set("class", "{} {}".format(item.get("class"), "column-last-container"))
-    tot += containers[-1].height + margin*2
     details_colum = item.find("./div[@class='details-column']")
     item.set("style", "flex-grow: 1;")
     column.append(item)
@@ -119,9 +117,8 @@ def _body(containers):
     columns_count = 0
     page = Element("div", {"class": "page", "style": "height: {}".format(COLUMN_HEIGHT)})
     for i in range(num_columns):
-        margin = get_margin(containers_heights[solution.index(i) : len(solution) - list(reversed(solution)).index(i)], COLUMN_HEIGHT)
         max_containers = solution.count(i)
-        column = _body_column(containers[first_unused_container:first_unused_container + max_containers], margin)
+        column = _body_column(containers[first_unused_container:first_unused_container + max_containers])
         page.append(column)
         first_unused_container += max_containers
         columns_count += 1
