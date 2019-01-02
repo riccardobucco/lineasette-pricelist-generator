@@ -3,7 +3,7 @@ from containers import get_containers
 from gui import get_user_input
 from math import ceil, floor
 from shutil import copyfile
-from utilities import get_margin, xls_to_csv
+from utilities import xls_to_csv
 from xml.etree.ElementTree import Element, tostring
 
 import os
