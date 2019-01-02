@@ -108,15 +108,18 @@ def get_containers(csv_file, images_folder):
     print("Generating a list of containers...")
     containers = []
     data = pd.read_csv(csv_file, dtype={"PREZZO": str})
-    for container_info, items_df in data.groupby(["FAMIGLIA", "DESCRIZIONE"]):
-        items = []
-        for index, row in items_df.iterrows():
-            items.append(Item(row["CODICE"], row["PREZZO"], row["DIMENSIONE"]))
-        family_image = glob(os.path.join(images_folder, "{}.png".format(container_info[0])))[0]
-        family = Family(container_info[0], items, container_info[1], family_image)
-        containers.append(Container(family))
+    for list, list_items in data.groupby(["LISTA"], sort=True):
+        list_containers = []
+        for container_info, items_df in list_items.groupby(["FAMIGLIA", "DESCRIZIONE"]):
+            items = []
+            for index, row in items_df.iterrows():
+                items.append(Item(row["CODICE"], row["PREZZO"], row["DIMENSIONE"]))
+            family_image = glob(os.path.join(images_folder, "{}.png".format(container_info[0])))[0]
+            family = Family(container_info[0], items, container_info[1], family_image)
+            list_containers.append(Container(family))
+        list_containers.sort(key=lambda container: container.family.code)
+        containers += list_containers
     print("{} containers have been successfully generated:".format(len(containers)))
-    containers.sort(key=lambda container: container.family.code)
     containers_str = ""
     for container in containers[:-1]:
         containers_str += "{}, ".format(container.family.code)
