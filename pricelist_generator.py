@@ -13,50 +13,13 @@ import xml.dom.minidom
 
 PIXELS_PER_CM = 37.79
 
-def _partition(A, h):
-    """
-    Computes a partition of the element of A based on the height h.
-    Returns the tuple (number of columns, element-column assignment).
-    """
-    I = []
-    if len(A) == 0:
-        return 0, I
-
-    n = 1
-    curr_h = 0
-
-    for a in A:
-        if curr_h + a > h:
-            n += 1
-            curr_h = 0
-
-        curr_h += a
-        I.append(n-1)
-
-    return n, I
-
-def _ceil(c, m):
-    """
-    Returns the ceil of the given number c to the next multiple of m.
-    """
-    return int(m * ceil(float(c) / m))
-
-def _get_solution(m, h, A):
-    """
-    Computes the solution of the problem, where m is the multiplier column's
-    factor, h is the height of the column, A is an array of element's height.
-    """
-    c, I = _partition(A, h)
-    maxcol = _ceil(c, m)
-
-    while c <= maxcol:
-        h -= 1
-        c, I = _partition(A, h)
-
-    h += 1
-
-    c, I = _partition(A, h)
-    return I, c
+def _get_solution(mult, column_height, heights):
+    data = {"mult": mult,
+            "column_height": column_height,
+            "heights": str(heights).replace(" ", "").lstrip("[").rstrip("]")}
+    r = requests.post(URL_CP_SOLVER, data=data)
+    result = r.json()
+    return result["solution"], result["num_columns"]
 
 # Create the head of the html price list
 def _head():
