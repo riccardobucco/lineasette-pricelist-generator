@@ -4,11 +4,14 @@ body {
 }
 .page {
     display: flex;
+    height: 18cm;
 }
 .column {
     width: 7cm;
     display: flex;
     flex-direction: column;
+    align-content: space-between;
+    height: 18cm;
 }
 .dimension-column {
     text-align: center;
@@ -32,6 +35,7 @@ body {
 .details-column {
     width: 4.5cm;
     display: flex;
+    align-items: flex-end;
     /* Margins top and bottom have to be setted */
 }
 .details-column .description {

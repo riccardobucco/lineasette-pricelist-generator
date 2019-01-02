@@ -76,24 +76,25 @@ def _body_column(containers, margin):
         item = containers[0].xml_element()
         item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
         details_colum = item.find("./div[@class='details-column']")
-        details_colum.set("style", "margin-top:{}px;margin-bottom:{}px;".format(margin, margin))
+        details_colum.set("style", "margin-top:{}px;margin-bottom:{}px;".format(margin, margin)) #TODO
         column.append(item)
         return column
     item = containers[0].xml_element()
     item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
+    item.set("style", "height:{}px".format(containers[0].height))
     tot += containers[0].height
     column.append(item)
     for it in containers[1:-1]:
         item = it.xml_element()
         details_colum = item.find("./div[@class='details-column']")
-        details_colum.set("style", "margin-top:{}px;".format(margin*2))
+        item.set("style", "flex-grow: 1;")
         tot += it.height + margin*2
         column.append(item)
     item = containers[-1].xml_element()
     item.set("class", "{} {}".format(item.get("class"), "column-last-container"))
     tot += containers[-1].height + margin*2
     details_colum = item.find("./div[@class='details-column']")
-    details_colum.set("style", "margin-top:{}px;".format(margin*2))
+    item.set("style", "flex-grow: 1;")
     column.append(item)
     return column
 
@@ -183,4 +184,3 @@ if __name__ == "__main__":
     config.read(os.path.join("res", "config.ini"))
     URL_CP_SOLVER = config["cpsolver"]["url"]
     get_user_input(main)
-
