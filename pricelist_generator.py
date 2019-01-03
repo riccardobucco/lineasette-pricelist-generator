@@ -45,7 +45,7 @@ def _body_column(containers):
         return column
     item = containers[0].xml_element()
     item.set("class", "{} {}".format(item.get("class"), "column-first-container"))
-    item.set("style", "height:{}px".format(containers[0].height))
+    item.set("style", "flex-grow: 1".format(containers[0].height))
     column.append(item)
     for it in containers[1:-1]:
         item = it.xml_element()
