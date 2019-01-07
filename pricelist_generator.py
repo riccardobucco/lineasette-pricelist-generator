@@ -3,7 +3,7 @@ from containers import get_containers
 from gui import get_user_input
 from math import ceil, floor
 from shutil import copyfile
-from utilities import xls_to_csv
+from utilities import make_images, xls_to_csv
 from xml.etree.ElementTree import Element, tostring
 
 import os
@@ -133,6 +133,10 @@ def main(layout, multiple, pricelist_filename, images_location, save_location):
         os.makedirs(save_location)
     with open(os.path.join(save_location, "listino.html"), "w") as file:
         file.write(xml_string.toprettyxml())
+    if not os.path.exists(os.path.join(save_location, "images")):
+        os.makedirs(os.path.join(save_location, "images"))
+    print("Resizing images...")
+    make_images(images_location, os.path.join(save_location, "images"))
     copyfile(os.path.join("res", "listino.css"), os.path.join(save_location, "listino.css"))
     print("Removing temporary files...")
     os.remove(os.path.join("tmp", "listino.csv"))

@@ -67,7 +67,7 @@ class Container:
 
     def _details_column(self):
         details_column = Element("div", {"class": "details-column"})
-        details_column.append(Element("img", {"src": self.family.image, "style": "width:{}px;height:{}px;".format(self.width, self.height)}))
+        details_column.append(Element("img", {"src": os.path.join("images", os.path.basename(self.family.image)), "style": "width:{}px;height:{}px;".format(self.width, self.height)}))
         description_element = Element("div", {"class": "description"})
         name_element = Element("div", {"class": "name"})
         name_element.text = self.family.name
