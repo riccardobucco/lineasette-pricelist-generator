@@ -26,7 +26,7 @@ def _get_solution(mult, column_height, heights):
 # Create the head of the html price list
 def _head():
     head = Element("head")
-    head.append(Element("meta", {"charset": "UTF-8"}))
+    head.append(Element("meta", {"charset": "ISO-8859-1"}))
     head.append(Element("link", {"rel": "stylesheet", "href": "listino.css"}))
     title = Element("title")
     title.text = "Listino"
