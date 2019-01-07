@@ -12,6 +12,8 @@ import tkinter as tk
 import xml.dom.minidom
 
 PIXELS_PER_CM = 37.79
+HORIZONTAL_HEIGHT = 18
+VERTICAL_HEIGHT = 26
 
 def _get_solution(mult, column_height, heights):
     data = {"mult": mult,
@@ -34,7 +36,7 @@ def _head():
 # Create a column of the html price list
 def _body_column(containers):
     tot = 0
-    column = Element("div", {"class": "column"})
+    column = Element("div", {"class": "column {}".format(LAYOUT)})
     # TODO: Test the case in which a column has only one container
     if len(containers) == 1:
         item = containers[0].xml_element()
@@ -78,7 +80,7 @@ def _body(containers):
     body = Element("body")
     first_unused_container = 0
     columns_count = 0
-    page = Element("div", {"class": "page", "style": "height: {}".format(COLUMN_HEIGHT)})
+    page = Element("div", {"class": "page {}".format(LAYOUT)})
     for i in range(num_columns):
         max_containers = solution.count(i)
         column = _body_column(containers[first_unused_container:first_unused_container + max_containers])
@@ -88,7 +90,7 @@ def _body(containers):
         if columns_count == MAX_COLUMNS:
             break_page = Element("div", {"style": "page-break-before:always;"})
             body.append(page)
-            page = Element("div", {"class": "page"})
+            page = Element("div", {"class": "page {}".format(LAYOUT)})
             columns_count = 0
     if page.find("./div") is not None:
         body.append(page)
@@ -111,12 +113,15 @@ def main(layout, multiple, pricelist_filename, images_location, save_location):
     global COLUMN_HEIGHT
     global MAX_COLUMNS
     global MULTIPLE
+    global LAYOUT
     if layout == 0:
-        COLUMN_HEIGHT = 18 * PIXELS_PER_CM
+        COLUMN_HEIGHT = HORIZONTAL_HEIGHT * PIXELS_PER_CM
         MAX_COLUMNS = 4
+        LAYOUT = "horizontal"
     elif layout == 1:
-        COLUMN_HEIGHT = 26 * PIXELS_PER_CM
+        COLUMN_HEIGHT = VERTICAL_HEIGHT * PIXELS_PER_CM
         MAX_COLUMNS = 3
+        LAYOUT = "vertical"
     MULTIPLE = multiple
     print("Layout: {}".format("horizontal" if layout==1 else "vertical"))
     print("Pricelist: {}".format(pricelist_filename))
