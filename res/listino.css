@@ -56,6 +56,7 @@ body {
 .details-column .description .code {
     font-size: xx-small;
     line-height: 3mm;
+    font-weight: bold;
 }
 .dimension-column {
     display: flex;
@@ -73,6 +74,7 @@ body {
 }
 .price {
     margin-right: 0.3em;
+    font-weight: bold;
 }
 .price-column .price {
     line-height: 3mm;
